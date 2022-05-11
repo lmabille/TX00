@@ -2,6 +2,9 @@
 import json
 import nltk
 #nltk.download('punkt')
+from nltk.corpus import stopwords
+
+nltk.download('stopwords')
 from nltk.stem.snowball import FrenchStemmer
 
 
@@ -23,14 +26,33 @@ tweets_sample = """
     {"_type": "snscrape.modules.twitter.Tweet", "url": "https://twitter.com/JLMelenchon/status/1520740751520509955", "date": "2022-05-01T12:23:43+00:00", "content": "Rappelons-nous aujourd'hui que le #1erMai, c'est la bataille historique pour la diminution du temps de travail.  \n\n#1erMai \n\nhttps://t.co/gUKyg4UoVv", "renderedContent": "Rappelons-nous aujourd'hui que le #1erMai, c'est la bataille historique pour la diminution du temps de travail.  \n\n#1erMai \n\nyoutu.be/Xm2IrLVNhco", "id": 1520740751520509955, "user": {"_type": "snscrape.modules.twitter.User", "username": "JLMelenchon", "id": 80820758, "displayname": "Jean-Luc M\u00e9lenchon", "description": "D\u00e9put\u00e9 @FranceInsoumise, candidat de l'#UnionPopulaire pour 2022. JLM ne tweete pas en personne. Rejoignez-nous sur melenchon2022.fr et @Melenchon_2022.", "rawDescription": "D\u00e9put\u00e9 @FranceInsoumise, candidat de l'#UnionPopulaire pour 2022. JLM ne tweete pas en personne. Rejoignez-nous sur https://t.co/L4S5X5uVLZ et @Melenchon_2022.", "descriptionUrls": [{"text": "melenchon2022.fr", "url": "http://melenchon2022.fr", "tcourl": "https://t.co/L4S5X5uVLZ", "indices": [116, 139]}], "verified": true, "created": "2009-10-08T10:50:24+00:00", "followersCount": 2566544, "friendsCount": 4859, "statusesCount": 44394, "favouritesCount": 3066, "listedCount": 5315, "mediaCount": 13662, "location": "France", "protected": false, "linkUrl": "http://melenchon.fr", "linkTcourl": "https://t.co/UVjNDMrIh1", "profileImageUrl": "https://pbs.twimg.com/profile_images/1504144526247616515/JgtQ2mGP_normal.jpg", "profileBannerUrl": "https://pbs.twimg.com/profile_banners/80820758/1649694099", "label": null, "url": "https://twitter.com/JLMelenchon"}, "replyCount": 16, "retweetCount": 108, "likeCount": 271, "quoteCount": 3, "conversationId": 1520738635921993731, "lang": "fr", "source": "<a href=\"https://about.twitter.com/products/tweetdeck\" rel=\"nofollow\">TweetDeck</a>", "sourceUrl": "https://about.twitter.com/products/tweetdeck", "sourceLabel": "TweetDeck", "outlinks": ["https://youtu.be/Xm2IrLVNhco"], "tcooutlinks": ["https://t.co/gUKyg4UoVv"], "media": null, "retweetedTweet": null, "quotedTweet": null, "inReplyToTweetId": 1520738635921993731, "inReplyToUser": {"_type": "snscrape.modules.twitter.User", "username": "JLMelenchon", "id": 80820758, "displayname": "Jean-Luc M\u00e9lenchon", "description": "D\u00e9put\u00e9 @FranceInsoumise, candidat de l'#UnionPopulaire pour 2022. JLM ne tweete pas en personne. Rejoignez-nous sur melenchon2022.fr et @Melenchon_2022.", "rawDescription": "D\u00e9put\u00e9 @FranceInsoumise, candidat de l'#UnionPopulaire pour 2022. JLM ne tweete pas en personne. Rejoignez-nous sur https://t.co/L4S5X5uVLZ et @Melenchon_2022.", "descriptionUrls": [{"text": "melenchon2022.fr", "url": "http://melenchon2022.fr", "tcourl": "https://t.co/L4S5X5uVLZ", "indices": [116, 139]}], "verified": true, "created": "2009-10-08T10:50:24+00:00", "followersCount": 2566544, "friendsCount": 4859, "statusesCount": 44394, "favouritesCount": 3066, "listedCount": 5315, "mediaCount": 13662, "location": "France", "protected": false, "linkUrl": "http://melenchon.fr", "linkTcourl": "https://t.co/UVjNDMrIh1", "profileImageUrl": "https://pbs.twimg.com/profile_images/1504144526247616515/JgtQ2mGP_normal.jpg", "profileBannerUrl": "https://pbs.twimg.com/profile_banners/80820758/1649694099", "label": null, "url": "https://twitter.com/JLMelenchon"}, "mentionedUsers": null, "coordinates": null, "place": null, "hashtags": ["1erMai", "1erMai"], "cashtags": null}
 }"""
 
-#tweets = json.loads(tweets_sample)
+"""
+with open("C:/Users/cesar/Desktop/UTC/GI04/TX00/TX00/Snscrape/Output/Arthaud.json", "r") as json_file:
+    json_list = list(json_file)
+for json_str in json_list:
+    tweet = json.loads(json_str)
+    tweet["content"]
+"""
 
-tweets = ["Bonjour, il y a de nombreuses maisons bleues", "je m'appelle Lucien", "Ma voiture est noire"]
+tweets = ["Bonjour, il y a de nombreuses maisons bleues #manu", "je m'appelle Lucien #environnent", "Ma voiture est noire #melanchon"]
 
 tokenizer = nltk.RegexpTokenizer(r'\w+') #enleve ponctuation
-tokenizer.tokenize(tweets[0])
+
+
 tweet_new = nltk.word_tokenize(tweets[0])
 
 stemmer = FrenchStemmer()
-test = [stemmer.stem(w) for w in tweet_new] 
-print(test)
+test = [stemmer.stem(w) for w in tweet_new]
+clean = []
+for w in test:
+    clean+=tokenizer.tokenize(w)
+
+stopwords_fr = set(nltk.corpus.stopwords.words('french'))
+my_stopwords = ['a']
+
+sw = list(stopwords_fr) + my_stopwords
+
+print(clean)
+
+final = [w.lower() for w in clean if w not in sw]
+print(final)
