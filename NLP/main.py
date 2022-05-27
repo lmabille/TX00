@@ -4,7 +4,7 @@ import nltk
 #nltk.download('punkt')
 from nltk.corpus import stopwords
 
-nltk.download('stopwords')
+#nltk.download('stopwords')
 from nltk.stem.snowball import FrenchStemmer
 
 
@@ -26,33 +26,62 @@ tweets_sample = """
     {"_type": "snscrape.modules.twitter.Tweet", "url": "https://twitter.com/JLMelenchon/status/1520740751520509955", "date": "2022-05-01T12:23:43+00:00", "content": "Rappelons-nous aujourd'hui que le #1erMai, c'est la bataille historique pour la diminution du temps de travail.  \n\n#1erMai \n\nhttps://t.co/gUKyg4UoVv", "renderedContent": "Rappelons-nous aujourd'hui que le #1erMai, c'est la bataille historique pour la diminution du temps de travail.  \n\n#1erMai \n\nyoutu.be/Xm2IrLVNhco", "id": 1520740751520509955, "user": {"_type": "snscrape.modules.twitter.User", "username": "JLMelenchon", "id": 80820758, "displayname": "Jean-Luc M\u00e9lenchon", "description": "D\u00e9put\u00e9 @FranceInsoumise, candidat de l'#UnionPopulaire pour 2022. JLM ne tweete pas en personne. Rejoignez-nous sur melenchon2022.fr et @Melenchon_2022.", "rawDescription": "D\u00e9put\u00e9 @FranceInsoumise, candidat de l'#UnionPopulaire pour 2022. JLM ne tweete pas en personne. Rejoignez-nous sur https://t.co/L4S5X5uVLZ et @Melenchon_2022.", "descriptionUrls": [{"text": "melenchon2022.fr", "url": "http://melenchon2022.fr", "tcourl": "https://t.co/L4S5X5uVLZ", "indices": [116, 139]}], "verified": true, "created": "2009-10-08T10:50:24+00:00", "followersCount": 2566544, "friendsCount": 4859, "statusesCount": 44394, "favouritesCount": 3066, "listedCount": 5315, "mediaCount": 13662, "location": "France", "protected": false, "linkUrl": "http://melenchon.fr", "linkTcourl": "https://t.co/UVjNDMrIh1", "profileImageUrl": "https://pbs.twimg.com/profile_images/1504144526247616515/JgtQ2mGP_normal.jpg", "profileBannerUrl": "https://pbs.twimg.com/profile_banners/80820758/1649694099", "label": null, "url": "https://twitter.com/JLMelenchon"}, "replyCount": 16, "retweetCount": 108, "likeCount": 271, "quoteCount": 3, "conversationId": 1520738635921993731, "lang": "fr", "source": "<a href=\"https://about.twitter.com/products/tweetdeck\" rel=\"nofollow\">TweetDeck</a>", "sourceUrl": "https://about.twitter.com/products/tweetdeck", "sourceLabel": "TweetDeck", "outlinks": ["https://youtu.be/Xm2IrLVNhco"], "tcooutlinks": ["https://t.co/gUKyg4UoVv"], "media": null, "retweetedTweet": null, "quotedTweet": null, "inReplyToTweetId": 1520738635921993731, "inReplyToUser": {"_type": "snscrape.modules.twitter.User", "username": "JLMelenchon", "id": 80820758, "displayname": "Jean-Luc M\u00e9lenchon", "description": "D\u00e9put\u00e9 @FranceInsoumise, candidat de l'#UnionPopulaire pour 2022. JLM ne tweete pas en personne. Rejoignez-nous sur melenchon2022.fr et @Melenchon_2022.", "rawDescription": "D\u00e9put\u00e9 @FranceInsoumise, candidat de l'#UnionPopulaire pour 2022. JLM ne tweete pas en personne. Rejoignez-nous sur https://t.co/L4S5X5uVLZ et @Melenchon_2022.", "descriptionUrls": [{"text": "melenchon2022.fr", "url": "http://melenchon2022.fr", "tcourl": "https://t.co/L4S5X5uVLZ", "indices": [116, 139]}], "verified": true, "created": "2009-10-08T10:50:24+00:00", "followersCount": 2566544, "friendsCount": 4859, "statusesCount": 44394, "favouritesCount": 3066, "listedCount": 5315, "mediaCount": 13662, "location": "France", "protected": false, "linkUrl": "http://melenchon.fr", "linkTcourl": "https://t.co/UVjNDMrIh1", "profileImageUrl": "https://pbs.twimg.com/profile_images/1504144526247616515/JgtQ2mGP_normal.jpg", "profileBannerUrl": "https://pbs.twimg.com/profile_banners/80820758/1649694099", "label": null, "url": "https://twitter.com/JLMelenchon"}, "mentionedUsers": null, "coordinates": null, "place": null, "hashtags": ["1erMai", "1erMai"], "cashtags": null}
 }"""
 
-"""
-with open("C:/Users/cesar/Desktop/UTC/GI04/TX00/TX00/Snscrape/Output/Arthaud.json", "r") as json_file:
-    json_list = list(json_file)
-for json_str in json_list:
-    tweet = json.loads(json_str)
-    tweet["content"]
-"""
+tweets_list = []
 
-tweets = ["Bonjour, il y a de nombreuses maisons bleues #manu", "je m'appelle Lucien #environnent", "Ma voiture est noire #melanchon"]
-
-tokenizer = nltk.RegexpTokenizer(r'\w+') #enleve ponctuation
+def extract_tweets():
+    with open("C:/Users/cesar/Desktop/UTC/GI04/TX00/TX00/Snscrape/Output/Arthaud.json", "r") as json_file:
+        json_list = list(json_file)
+    for json_str in json_list:
+        tweet_json = json.loads(json_str)
+        tweets_list.append(tweet_json["content"])
 
 
-tweet_new = nltk.word_tokenize(tweets[0])
 
-stemmer = FrenchStemmer()
-test = [stemmer.stem(w) for w in tweet_new]
-clean = []
-for w in test:
-    clean+=tokenizer.tokenize(w)
+#tweets_list = ["Bonjour, il y a de nombreuses maisons bleues et vive l'écologie #manu", "je m'appelle Lucien nature important #environement", "Ma voiture est noire #melanchon"]
+processed_tweets = []
 
-stopwords_fr = set(nltk.corpus.stopwords.words('french'))
-my_stopwords = ['a']
+def process_tweets(tweets):
+    for tweet in tweets:
+        tokenizer = nltk.RegexpTokenizer(r'\w+') #enleve ponctuation
+        tweet_new = nltk.word_tokenize(tweet)
 
-sw = list(stopwords_fr) + my_stopwords
+        #stemmer = FrenchStemmer()
+        #test = [stemmer.stem(w) for w in tweet_new] #enleve pluriels et genres
+        clean = []
+        test = tweet_new
+        for w in test:
+           clean+=tokenizer.tokenize(w)
 
-print(clean)
+        stopwords_fr = set(nltk.corpus.stopwords.words('french'))
+        my_stopwords = ["a"]
+        begin_words = ["m'", "l'"]
+        sw = list(stopwords_fr) + my_stopwords + begin_words
+        final = [w.lower() for w in clean if w not in sw] #enleve mots liaison
+        processed_tweets.append(final)
 
-final = [w.lower() for w in clean if w not in sw]
-print(final)
+def champ_lex_to_list():
+    champ_lex = []
+    with open ("./NLP/ecologie.txt", "r", encoding="utf-8") as file:
+        lines = file.readlines()
+    for line in lines:
+        champ_lex.append(line.strip())
+    return champ_lex
+
+def tweets_to_theme(tweets, champ_lex):
+    tweet_and_count = []
+    for tweet in tweets:
+        max_count = 0
+        for w in champ_lex:
+            if tweet.count(w) > max_count:
+                max_count = tweet.count(w)
+        tweet_and_count.append((tweet, max_count))
+    return tweet_and_count
+
+extract_tweets()
+champ_eco = champ_lex_to_list()
+process_tweets(tweets_list)
+
+for tweet in tweets_to_theme(processed_tweets, champ_eco):
+    if tweet[1] >0:
+        print(tweet)
+
