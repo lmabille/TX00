@@ -10,8 +10,8 @@ from nltk.stem.snowball import FrenchStemmer
 tweets_list = []
 
 def extract_tweets():
-    with open("C:/Users/cesar/Desktop/UTC/GI04/TX00/TX00/Snscrape/Output/Zemmour.json", "r") as json_file:
-        print(json_file.name)
+    with open("C:/Users/cesar/Desktop/UTC/GI04/TX00/TX00/Snscrape/Output/Roussel.json", "r") as json_file:
+        print("Fichier parsé: ", json_file.name)
         json_list = list(json_file)
     for json_str in json_list:
         tweet_json = json.loads(json_str)
@@ -59,15 +59,21 @@ def tweets_to_theme(tweets, champ_lex):
     return tweet_and_count
 
 extract_tweets()
-champ_eco = champ_lex_to_list()
+champ_lexical = champ_lex_to_list()
 process_tweets(tweets_list)
+
+#-------------------------------------MAIN------------------------------------------------------------
 count = 0
 max_c=0
-for tweet in tweets_to_theme(processed_tweets, champ_eco):
+sum_count=0
+for tweet in tweets_to_theme(processed_tweets, champ_lexical):
     if tweet[1] >0:
         if tweet[1] > max_c:
             max_c = tweet[1]
         count+=1
-print((count/len(tweets_to_theme(processed_tweets, champ_eco)))*100)
-print(max_c)
+        sum_count += tweet[1]
+
+print(" Occurence moyenne: {:.2f}".format(sum_count/len(tweets_to_theme(processed_tweets, champ_lexical))))
+print(" Taux de tweets liés au thème: {:.2f} %".format((count/len(tweets_to_theme(processed_tweets, champ_lexical)))*100))
+print(" Nombre d'occurence max dans un tweet: ", max_c)
 
