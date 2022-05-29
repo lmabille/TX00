@@ -41,7 +41,7 @@ def process_tweets(tweets):
 
 def champ_lex_to_list(theme):
     champ_lex = []
-    with open ("./NLP/"+theme+".txt", "r", encoding="utf-8") as file:
+    with open ("C:/Users/cesar/Desktop/UTC/GI04/TX00/TX00/NLP/"+theme+".txt", "r", encoding="utf-8") as file:
         print("theme: ", file.name)
         lines = file.readlines()
     for line in lines:
@@ -62,9 +62,13 @@ def tweets_to_theme(tweets, champ_lex):
 #-------------------------------------MAIN------------------------------------------------------------
 
 def themes_by_candidate(candidate):
+    result_dict = {}
     tweets = extract_tweets(candidate) #recupere data scrappée
     tweets_cleaned = process_tweets(tweets) #nettoie les tweets
     list_themes = ["ecologie", "economie", "education", "immigration", "sante", "securite_defense"]
+    occurence_moy_par_tweet = []
+    taux_tweets_lies = []
+    occurence_max = []
     for theme in list_themes:
         champ_lexical = champ_lex_to_list(theme)
         count = 0
@@ -81,5 +85,13 @@ def themes_by_candidate(candidate):
         print(" Taux de tweets liés au thème: {:.2f} %".format((count/len(tweets_occ))*100))
         print(" Nombre d'occurence max dans un tweet: ", max_c)
         print("--------------------------------------------------------------------------------------------------")
+        occurence_moy_par_tweet.append(round(sum_count/len(tweets_occ), 4))
+        taux_tweets_lies.append(round(count/len(tweets_occ)*100, 4))
+        occurence_max.append(max_c)
+    result_dict["occurence_moy"] = occurence_moy_par_tweet
+    result_dict["tweets_lies"] = taux_tweets_lies
+    result_dict["occurence_max"] = occurence_max
+    return result_dict
 
-themes_by_candidate("Poutou")
+
+#themes_by_candidate("Poutou")
