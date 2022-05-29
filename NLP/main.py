@@ -7,22 +7,19 @@ from nltk.corpus import stopwords
 #nltk.download('stopwords')
 from nltk.stem.snowball import FrenchStemmer
 
-tweets_list = []
 
-def extract_tweets():
-    with open("C:/Users/cesar/Desktop/UTC/GI04/TX00/TX00/Snscrape/Output/Roussel.json", "r") as json_file:
+def extract_tweets(candidate):
+    tweets_list = []
+    with open("C:/Users/cesar/Desktop/UTC/GI04/TX00/TX00/Snscrape/Output/"+candidate+".json", "r") as json_file:
         print("Fichier parsé: ", json_file.name)
         json_list = list(json_file)
     for json_str in json_list:
         tweet_json = json.loads(json_str)
         tweets_list.append(tweet_json["content"])
-
-
-
-#tweets_list = ["Bonjour, il y a de nombreuses maisons bleues et vive l'écologie #manu", "je m'appelle Lucien nature important #environement", "Ma voiture est noire #melanchon"]
-processed_tweets = []
+    return tweets_list
 
 def process_tweets(tweets):
+    processed_tweets = []
     for tweet in tweets:
         tokenizer = nltk.RegexpTokenizer(r'\w+') #enleve ponctuation
         tweet_new = nltk.word_tokenize(tweet)
@@ -40,10 +37,12 @@ def process_tweets(tweets):
         sw = list(stopwords_fr) + my_stopwords + begin_words
         final = [w.lower() for w in clean if w not in sw] #enleve mots liaison
         processed_tweets.append(final)
+    return processed_tweets
 
-def champ_lex_to_list():
+def champ_lex_to_list(theme):
     champ_lex = []
-    with open ("./NLP/economie.txt", "r", encoding="utf-8") as file:
+    with open ("./NLP/"+theme+".txt", "r", encoding="utf-8") as file:
+        print("theme: ", file.name)
         lines = file.readlines()
     for line in lines:
         champ_lex.append(line.strip())
@@ -58,22 +57,29 @@ def tweets_to_theme(tweets, champ_lex):
         tweet_and_count.append((tweet, tweet_count))
     return tweet_and_count
 
-extract_tweets()
-champ_lexical = champ_lex_to_list()
-process_tweets(tweets_list)
+
 
 #-------------------------------------MAIN------------------------------------------------------------
-count = 0
-max_c=0
-sum_count=0
-for tweet in tweets_to_theme(processed_tweets, champ_lexical):
-    if tweet[1] >0:
-        if tweet[1] > max_c:
-            max_c = tweet[1]
-        count+=1
-        sum_count += tweet[1]
 
-print(" Occurence moyenne: {:.2f}".format(sum_count/len(tweets_to_theme(processed_tweets, champ_lexical))))
-print(" Taux de tweets liés au thème: {:.2f} %".format((count/len(tweets_to_theme(processed_tweets, champ_lexical)))*100))
-print(" Nombre d'occurence max dans un tweet: ", max_c)
+def themes_by_candidate(candidate):
+    tweets = extract_tweets(candidate) #recupere data scrappée
+    tweets_cleaned = process_tweets(tweets) #nettoie les tweets
+    list_themes = ["ecologie", "economie", "education", "immigration", "sante", "securite_defense"]
+    for theme in list_themes:
+        champ_lexical = champ_lex_to_list(theme)
+        count = 0
+        max_c=0
+        sum_count=0
+        tweets_occ = tweets_to_theme(tweets_cleaned, champ_lexical)
+        for tweet in tweets_occ:
+            if tweet[1] >0:
+                if tweet[1] > max_c:
+                    max_c = tweet[1]
+                count+=1
+                sum_count += tweet[1]
+        print(" Occurence moyenne par tweet: {:.2f}".format(sum_count/len(tweets_occ)))
+        print(" Taux de tweets liés au thème: {:.2f} %".format((count/len(tweets_occ))*100))
+        print(" Nombre d'occurence max dans un tweet: ", max_c)
+        print("--------------------------------------------------------------------------------------------------")
 
+themes_by_candidate("Poutou")
