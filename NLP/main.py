@@ -55,7 +55,7 @@ def tweets_to_theme(tweets):
     theme_list_words = {}
     for theme in list_themes:
         theme_list_words[theme] = champ_lex_to_list(theme)
-        print(theme_list_words[theme])
+        #print(theme_list_words[theme])
     tweet_and_count = []
     counts_per_theme = {} #{theme1: occurences,..., themen: occurences}
     for tweet in tweets:
@@ -71,7 +71,7 @@ def tweets_to_theme(tweets):
         max_theme = "init"
         #print("-----------tweet-------------")
         list_occ = list(counts_per_theme.values())
-        if list_occ.count(list_occ[0]) == len(list_occ):
+        if list_occ.count(list_occ[0]) == len(list_occ): #si égalité entre les thèmes
             #print("EGALITE")
             pass
         else:
@@ -209,6 +209,43 @@ def tweet_by_time_hashtag(candidate):
         count_by_theme[theme].reverse()
 
     return count_by_theme
+
+
+
+#-------------------------------------TWEETS BY TIME AND ACCOUNTS------------------------------------------------------------
+
+
+def tweet_by_time_account(candidate):
+    count_by_theme = {}
+    list_themes = ["ecologie", "economie", "education", "immigration", "sante", "securite_defense"]
+    for theme in list_themes:
+        count_by_theme[theme] = []
+    tweets = extract_tweets(candidate, "comptes")  # recupere data scrappée
+    tweets_cleaned = process_tweets(tweets)  # nettoie les tweets
+    tweets_occ = tweets_to_theme(tweets_cleaned)  # [(tweet, (champ lex, occ_max)),..,]
+    dates = []
+
+    for tweet in tweets_occ:
+        date = tweet[0][0]
+        theme = tweet[1][0]
+        dates.append(date)
+
+        for curr_theme in list_themes:
+            if curr_theme == theme:
+                count_by_theme[curr_theme].append(1)
+            else:
+                count_by_theme[curr_theme].append(0)
+
+    print(len(count_by_theme['ecologie']), len(count_by_theme['economie']), len(tweets_occ), len(tweets_cleaned))
+    count_by_theme["date"] = dates
+    print(count_by_theme.keys())
+
+    for theme in list_themes: #met dans le sens janvier -> Avril
+        count_by_theme[theme].reverse()
+
+    return count_by_theme
+
+
 
 
 
