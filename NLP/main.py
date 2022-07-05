@@ -10,7 +10,7 @@ from nltk.stem.snowball import FrenchStemmer
 
 def extract_tweets(candidate, filter):
     tweets_list = []
-    with open("C:/Users/cesar/Desktop/UTC/GI04/TX00/TX00/Snscrape/Output/"+filter+"/"+candidate+".json", "r") as json_file:
+    with open("/home/lumabill/Documents/TX00/Snscrape/Output/"+filter+"/"+candidate+".json", "r") as json_file:
         print("Fichier parsé: ", json_file.name)
         json_list = list(json_file)
     for json_str in json_list:
@@ -43,7 +43,7 @@ def process_tweets(tweets):
 
 def champ_lex_to_list(theme):
     champ_lex = []
-    with open("C:/Users/cesar/Desktop/UTC/GI04/TX00/TX00/NLP/"+theme+".txt", "r", encoding="utf-8") as file:
+    with open("/home/lumabill/Documents/TX00/NLP/"+theme+".txt", "r", encoding="utf-8") as file:
         print("theme: ", file.name)
         lines = file.readlines()
     for line in lines:
