@@ -1,10 +1,10 @@
 
 import json
 import nltk
-#nltk.download('punkt')
+nltk.download('punkt')
 from nltk.corpus import stopwords
 
-#nltk.download('stopwords')
+nltk.download('stopwords')
 from nltk.stem.snowball import FrenchStemmer
 
 
@@ -26,8 +26,6 @@ def process_tweets(tweets):
         tokenizer = nltk.RegexpTokenizer(r'\w+') #enleve ponctuation
         content_new = nltk.word_tokenize(content)
 
-        #stemmer = FrenchStemmer()
-        #test = [stemmer.stem(w) for w in tweet_new] #enleve pluriels et genres
         clean = []
         test = content_new
         for w in test:
@@ -55,7 +53,7 @@ def tweets_to_theme(tweets):
     theme_list_words = {}
     for theme in list_themes:
         theme_list_words[theme] = champ_lex_to_list(theme)
-        #print(theme_list_words[theme])
+  
     tweet_and_count = []
     counts_per_theme = {} #{theme1: occurences,..., themen: occurences}
     for tweet in tweets:
@@ -76,11 +74,10 @@ def tweets_to_theme(tweets):
             pass
         else:
             for theme, occ in counts_per_theme.items():
-                #print(theme,":", occ)
                 if occ > max_occ:
                     max_occ = occ
                     max_theme = theme
-            #print("max",max_theme)
+       
 #-------------------------on ajoute le tweet avec son theme correspondant a la liste des tweets-----------------------
             tweet_and_count.append(((date,content), (max_theme, max_occ))) #tuples ( ( (date,content), (max_theme, max occ) ),... )
     return tweet_and_count
@@ -146,11 +143,8 @@ def themes_by_candidate_hashtag(candidate):
     tweets_list_by_theme = tweets_by_themes(tweets_occ) #dictionnaire de listes des tweets par theme
 
     for theme, list_tweets in tweets_list_by_theme.items():
-        #print(theme, list_tweets)
         print("theme: ",theme)
-        #print(" Occurence moyenne par tweet: {:.2f}".format(sum_count / len(tweets_occ)))
         print(" Taux de tweets liés au thème: {:.2f} %".format((len(list_tweets) / len(tweets_occ)) * 100))
-        #print(" Nombre d'occurence max dans un tweet: ", occ)
         print(" Nombre de tweets liés au thème: ", len(list_tweets))
 
         print("--------------------------------------------------------------------------------------------------")
@@ -181,20 +175,7 @@ def tweet_by_time_hashtag(candidate):
         date = tweet[0][0]
         theme = tweet[1][0]
         dates.append(date)
-        """
-        for curr_theme in list_themes:
-            if curr_theme == theme:
-                if len(count_by_theme[curr_theme]) == 0: #si 1er parcour, liste vide, alors on append juste
-                    new_count = 1
-                else: # si pas vide on peut incrémenter
-                    new_count = count_by_theme[theme][-1] + 1 #dernier compteur +1
-                count_by_theme[theme].append(new_count)
-            else:
-                if len(count_by_theme[curr_theme]) == 0: #si 1er parcour, liste vide, alors on append juste
-                    new_count = 0
-                else: # si pas vide on peut incrémenter
-                    new_count = count_by_theme[curr_theme][-1] #dernier compteur +1
-                count_by_theme[curr_theme].append(new_count)"""
+        
         for curr_theme in list_themes:
             if curr_theme == theme:
                 count_by_theme[curr_theme].append(1)
@@ -249,6 +230,7 @@ def tweet_by_time_account(candidate):
 
 
 
-#themes_by_candidate_compte("Fabien_Roussel")
-#themes_by_candidate_hashtag()
-#tweet_by_time_hashtag("Roussel")
+#themes_by_candidate_compte("candidate_name")
+#themes_by_candidate_hashtag("candidate_name")
+#tweet_by_time_hashtag("candidate_name")
+#tweet_by_time_hashtag("candidate_name")
